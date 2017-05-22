@@ -28,5 +28,12 @@
         android:visibility="visible"
         android:datePickerMode="spinner"
         />
+
+    <TextView
+        android:id="@+id/timeRemaining"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="hello world"
+        />
 </LinearLayout>
 </android.support.constraint.ConstraintLayout>
