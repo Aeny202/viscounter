@@ -9,7 +9,7 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 import java.util.Calendar;
-
+import java.util.GregorianCalendar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -87,12 +87,54 @@ public class MainActivity extends AppCompatActivity {
     private void setTimeRemaining(int intStartYear, int intStartMonth, int intStartDay, int intEndYear, int intEndMonth, int intEndDay)
     {
 
-        TextView txtTimeRemaining = (TextView) findViewById(R.id.timeRemaining);
+        // Get total amount of days in a month
+        int intTotalDaysInStartMonth = getTotalDaysInMonth(intStartYear, intStartMonth);
+        int intTotalDaysInEndMonth = getTotalDaysInMonth(intEndYear, intEndMonth);
+
         int intRemainingYears = intEndYear - intStartYear;
-        int intRemaningMonths = intEndMonth - intStartMonth;
+
+        int intRemainingMonths = intEndMonth - intStartMonth;
         int intRemainingDays = intEndDay - intStartDay;
 
-        txtTimeRemaining.setText("There are "+intRemainingYears+" year(s), "+intRemaningMonths+" month(s) and "+intRemainingDays+" day(s) remaining!");
+        /*
+        Unroll month into days
+        Example: 30/06/2017 - 02/07/2017 = 02-30 = -28 days
+        Subtract 1 month of intTempMonth, add 31 days to intTempDays (31-28 = 3)
+        */
+        if(intRemainingDays < 1)
+        {
+            intRemainingDays = (getTotalDaysInMonth(intStartYear,intStartMonth)+1) + intRemainingDays;
+            intRemainingMonths = intRemainingMonths - 1;
+        }
+
+        /*
+        Unroll month to a year
+        Example: 30/06/2008 - 30/02/2009 = 02-06=-4 months
+        Subtract 1 year from intTempYear, add 8 months to intTempMonth (12-4 = 8 months)
+
+        Example: 30/04/2008 - 30/03/2009 = 03-04=-1 month (12-1= 11 months)
+        Subtract 1 year from intTempYear, add 11 months to intTempMonth
+
+        Example: 30/05/2009 - 30/06/2009 = 06-05=+1
+        Subtract 0 year from intTempYear, add 1 month to intTempMonths
+        */
+        if(intRemainingMonths < 1)
+        {
+            intRemainingMonths = 12 + intRemainingMonths;
+            intRemainingYears = intRemainingYears - 1;
+        }
+
+        TextView txtTimeRemaining = (TextView) findViewById(R.id.timeRemaining);
+        txtTimeRemaining.setText("There are "+intRemainingYears+" year(s), "+intRemainingMonths+" month(s) and "+intRemainingDays+" day(s) remaining!");
     }
 
+    // Get the total amount of days for a given month in a given year.
+    private int getTotalDaysInMonth(int intYear, int intMonth)
+    {
+        // Create a calendar object and set year and month
+        Calendar mycal = new GregorianCalendar(intYear, intMonth, 0);
+
+        // Get the number of days in that month
+        return mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
 }
