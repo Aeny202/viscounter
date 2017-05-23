@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         Example: 30/05/2009 - 30/06/2009 = 06-05=+1
         Subtract 0 year from intTempYear, add 1 month to intTempMonths
         */
-        if(intRemainingMonths < 1)
+        if(intRemainingMonths < 0)
         {
             intRemainingMonths = 12 + intRemainingMonths;
             intRemainingYears = intRemainingYears - 1;
